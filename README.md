@@ -1,11 +1,11 @@
 # ERC20 Smart Contract
 My Simple ERC20 Smart Contract
 
-###Deploy to rinkeby network:
+### Deploy to rinkeby network:
 ```
 npx hardhat run --network rinkeby scripts/deploy.ts
 ```
-###HardHat tasks:
+### HardHat tasks:
 Approve tokens
 ```
 npx hardhat myERC20_approve --address [contract address] --address [to-address] --amount=1
