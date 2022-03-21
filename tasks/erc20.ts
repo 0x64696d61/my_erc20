@@ -1,7 +1,3 @@
-// npx hardhat verify --network rinkeby 0xa75945f1281180a7329c394B9b49802ae4af2dbf
-// npx hardhat run --network rinkeby scripts/deploy.js
-// Donations contract deployed to: 0xAB25a26bDc289b1F6005AD650d1712E6212D4c27
-
 import {task} from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
 
@@ -14,8 +10,8 @@ task(prefix + "transfer", "Transfer tokens")
     .addParam("amount", "The amount of donations in wei")
     .setAction(async (taskArgs, hre) => {
         const [acc1] = await hre.ethers.getSigners()
-        const Contract = await hre.ethers.getContractFactory(contract_name);
-        const contract = await Contract.attach(taskArgs.address)
+        const factory = await hre.ethers.getContractFactory(contract_name);
+        const contract = await factory.attach(taskArgs.address)
         await contract.connect(acc1).transfer(taskArgs.toAddress, taskArgs.amount)
     });
 

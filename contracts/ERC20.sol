@@ -2,18 +2,16 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 contract ERC20 {
-    uint8 public decimals;
-    string public name;
-    string public symbol;
+    uint8 constant public decimals = 18;
+    string constant public name = 'my_super_token';
+    string constant public symbol = 'MST';
+    uint256 constant public initTotalSupply = 100 * 10 ** decimals;
+    uint256 public totalSupply;
     address private _owner;
-    uint256 private _total_supply;
 
     constructor() {
         _owner = msg.sender;
-        name = 'my_super_token';
-        symbol = 'MST';
-        decimals = 18;
-        mint(_owner, 100 * 10 ** decimals);
+        mint(_owner, initTotalSupply);
     }
 
     modifier ownerOnly {
@@ -40,7 +38,6 @@ contract ERC20 {
     function transferFrom(address from, address to, uint256 value) public returns (bool success)
     {
         uint256 _allowance = allowance(from, msg.sender);
-        require(value < type(uint256).max, 'Incorrect value');
         require(_balances[from] >= value, 'Balance size to small');
         require(value <= _allowance, 'The amount exceeds the allowable amount');
 
@@ -55,7 +52,7 @@ contract ERC20 {
     {
         require(account != address(0), 'Wrong address');
 
-        _total_supply += amount;
+        totalSupply += amount;
         _balances[account] += amount;
         emit Transfer(address(0), account, amount);
     }
@@ -65,15 +62,13 @@ contract ERC20 {
         require(account != address(0), 'Wrong address');
         require(_balances[account] >= amount, 'Balance to small');
 
-        _total_supply -= amount;
+        totalSupply -= amount;
         _balances[account] -= amount;
         emit Transfer(account, address(0), amount);
     }
 
     function approve(address spender, uint256 value) public returns (bool success)
     {
-        require(value >= 0, 'Invalid value');
-
         _allowances[msg.sender][spender] = value;
         return true;
     }
@@ -87,10 +82,4 @@ contract ERC20 {
     {
         return _balances[owner];
     }
-
-    function totalSupply() external view returns (uint256)
-    {
-        return _total_supply;
-    }
-
 }

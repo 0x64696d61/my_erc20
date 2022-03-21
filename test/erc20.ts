@@ -55,9 +55,6 @@ describe("ERC20 token", function () {
         it("Should be revert if transfer tokens more then allowance", async function () {
             await expect(contract.transferFrom(acc1.address, acc2.address, my_value)).to.be.revertedWith('The amount exceeds the allowable amount')
         })
-        it("Should be revert if transfer MAX_UINT", async function () {
-            await expect(contract.transferFrom(acc1.address, acc2.address, ethers.constants.MaxUint256)).to.be.revertedWith('Incorrect value')
-        })
         it("Should be possible transfer allowance tokens", async function () {
             await contract.connect(acc1).approve(acc2.address, my_value)
             await contract.connect(acc2).transferFrom(acc1.address, acc2.address, my_value)
@@ -111,7 +108,7 @@ describe("ERC20 token", function () {
             await expect(contract.connect(acc1).burn(acc2.address, my_value + 1)).to.be.revertedWith('Balance to small')
         })
         it("Should be revert if try burn for zero address", async () => {
-            await expect(contract.mint(ethers.constants.AddressZero, my_value)).to.be.revertedWith("Wrong address");
+            await expect(contract.burn(ethers.constants.AddressZero, my_value)).to.be.revertedWith("Wrong address");
         })
     })
     describe("approve method", function () {
